@@ -1,0 +1,8 @@
+﻿namespace Library.BookBorrowing.Models
+{
+	public class User
+	{
+		public int UserId { get; set; }
+		public string FullName { get; set; } = string.Empty;
+	}
+}
