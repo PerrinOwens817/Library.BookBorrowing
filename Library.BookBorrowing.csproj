@@ -6,4 +6,11 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Compile Remove="Library.BookBorrowing.Tests\**" />
+    <Content Remove="Library.BookBorrowing.Tests\**" />
+    <EmbeddedResource Remove="Library.BookBorrowing.Tests\**" />
+    <None Remove="Library.BookBorrowing.Tests\**" />
+  </ItemGroup>
+
 </Project>
