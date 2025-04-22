@@ -1,4 +1,5 @@
-﻿namespace Library.BookBorrowing.Models
+﻿// Note: This model is reserved for future enhancements (if i feel like it lol)
+namespace Library.BookBorrowing.Models
 {
 	/// <summary>
 	/// Represents a user who borrows books from the library.
