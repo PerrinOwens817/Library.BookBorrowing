@@ -1,3 +1,7 @@
+using Microsoft.EntityFrameworkCore;
+using Library.BookBorrowing.Models;
+using Library.BookBorrowing.Data;
+
 namespace Library.BookBorrowing
 {
 	public class Program
@@ -5,6 +9,9 @@ namespace Library.BookBorrowing
 		public static void Main(string[] args)
 		{
 			var builder = WebApplication.CreateBuilder(args);
+
+			builder.Services.AddDbContext<LibraryContext>(options =>
+				options.UseSqlServer(builder.Configuration.GetConnectionString("LibraryConnection")));
 
 			// Add services to the container.
 			builder.Services.AddControllersWithViews();
