@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Library.BookBorrowing.Models;
+using Library.BookBorrowing.Services;
 using Library.BookBorrowing.Data;
 
 namespace Library.BookBorrowing
@@ -10,19 +11,22 @@ namespace Library.BookBorrowing
 		{
 			var builder = WebApplication.CreateBuilder(args);
 
+			// Register the database context
 			builder.Services.AddDbContext<LibraryContext>(options =>
 				options.UseSqlServer(builder.Configuration.GetConnectionString("LibraryConnection")));
 
-			// Add services to the container.
+			// Register custom services
+			builder.Services.AddScoped<BorrowService>();
+
+			// Add MVC support
 			builder.Services.AddControllersWithViews();
 
 			var app = builder.Build();
 
-			// Configure the HTTP request pipeline.
+			// Configure the HTTP request pipeline
 			if (!app.Environment.IsDevelopment())
 			{
 				app.UseExceptionHandler("/Home/Error");
-				// The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
 				app.UseHsts();
 			}
 
