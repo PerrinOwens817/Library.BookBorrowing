@@ -1,4 +1,5 @@
-﻿using Library.BookBorrowing.Models;
+﻿using Library.BookBorrowing.Data;
+using Library.BookBorrowing.Models;
 
 namespace Library.BookBorrowing.Services
 {
@@ -7,63 +8,55 @@ namespace Library.BookBorrowing.Services
 	/// </summary>
 	public class BorrowService
 	{
-		private List<Book> _books;
-		private List<BorrowRecord> _borrowRecords;
+		private readonly LibraryContext _context;
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="BorrowService"/> class with sample books.
+		/// Constructor that takes the database context.
 		/// </summary>
-		public BorrowService()
+		public BorrowService(LibraryContext context)
 		{
-			_books = new List<Book>
-			{
-				new Book { BookId = 1, Title = "The Giver", IsBorrowed = false },
-				new Book { BookId = 2, Title = "The Hobbit", IsBorrowed = true }
-			};
-			_borrowRecords = new List<BorrowRecord>();
+			_context = context;
 		}
 
 		/// <summary>
-		/// Checks if a specific book is available for borrowing.
+		/// Checks if the book is available to borrow.
 		/// </summary>
-		/// <param name="bookId">The ID of the book to check.</param>
-		/// <returns>True if the book is available; otherwise, false.</returns>
 		public bool CheckAvailability(int bookId)
 		{
-			var book = _books.FirstOrDefault(b => b.BookId == bookId);
+			var book = _context.Books.FirstOrDefault(b => b.BookId == bookId);
 			return book != null && !book.IsBorrowed;
 		}
 
 		/// <summary>
-		/// Processes a book borrowing request for a given user and book.
+		/// Handles borrowing a book for a user.
 		/// </summary>
-		/// <param name="userId">The ID of the user borrowing the book.</param>
-		/// <param name="bookId">The ID of the book to be borrowed.</param>
-		/// <returns>A message indicating the borrowing status or due date.</returns>
 		public string BorrowBook(int userId, int bookId)
 		{
 			if (!CheckAvailability(bookId)) return "This book is currently unavailable.";
 
-			var book = _books.First(b => b.BookId == bookId);
+			var book = _context.Books.First(b => b.BookId == bookId);
 			book.IsBorrowed = true;
 
 			var record = new BorrowRecord
 			{
-				Id = _borrowRecords.Count + 1,
 				UserId = userId,
 				BookId = bookId,
 				BorrowDate = DateTime.Now,
 				DueDate = DateTime.Now.AddDays(14)
 			};
 
-			_borrowRecords.Add(record);
+			_context.BorrowRecords.Add(record);
+			_context.SaveChanges(); // 🔥 this is what actually writes to the DB
+
 			return $"Book borrowed! Due on {record.DueDate:d}";
 		}
 
 		/// <summary>
-		/// Retrieves a list of books that are currently available to borrow.
+		/// Gets a list of all books that are not currently borrowed.
 		/// </summary>
-		/// <returns>A list of available books.</returns>
-		public List<Book> GetAvailableBooks() => _books.Where(b => !b.IsBorrowed).ToList();
+		public List<Book> GetAvailableBooks()
+		{
+			return _context.Books.Where(b => !b.IsBorrowed).ToList();
+		}
 	}
 }
