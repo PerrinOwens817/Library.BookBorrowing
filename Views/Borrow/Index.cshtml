@@ -1,27 +1,46 @@
 ﻿@model List<Library.BookBorrowing.Models.Book>
+
 @{
-	ViewBag.Title = "Borrow a Book";
+	ViewData["Title"] = "Borrow a Book";
 }
 
 <h2>Borrow a Book</h2>
 
-<form asp-controller="Borrow" asp-action="Borrow" method="post">
-	<label>User ID:</label>
-	<input type="number" name="userId" required />
-	<label>Book ID:</label>
-	<input type="number" name="bookId" required />
-	<button type="submit">Borrow</button>
+<form asp-action="Borrow" method="post">
+	<div class="form-group">
+		<label for="userId">User ID:</label>
+		<input type="number" name="userId" class="form-control" required />
+	</div>
+
+	<div class="form-group">
+		<label for="bookId">Book ID:</label>
+		<input type="number" name="bookId" class="form-control" required />
+	</div>
+
+	<button type="submit" class="btn btn-primary">Borrow</button>
 </form>
 
 @if (ViewBag.Message != null)
 {
-	<p>@ViewBag.Message</p>
+	<div class="alert alert-info mt-3">
+		@ViewBag.Message
+	</div>
 }
 
-<h3>Available Books:</h3>
-<ul>
-	@foreach (var book in Model)
-	{
-		<li>@book.BookId - @book.Title</li>
-	}
-</ul>
+<h3 class="mt-4">Available Books:</h3>
+@if (Model != null && Model.Any())
+{
+	<ul>
+		@foreach (var book in Model)
+		{
+			<li>
+				<strong>@book.Title</strong> (ID: @book.BookId)
+			</li>
+		}
+	</ul>
+}
+else
+{
+	<p>No books available at the moment.</p>
+}
+

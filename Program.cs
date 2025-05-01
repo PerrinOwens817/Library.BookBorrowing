@@ -23,6 +23,27 @@ namespace Library.BookBorrowing
 
 			var app = builder.Build();
 
+			//  SEEDING STARTS HERE
+			using (var scope = app.Services.CreateScope())
+			{
+				var context = scope.ServiceProvider.GetRequiredService<LibraryContext>();
+
+				// Run DB migrations
+				context.Database.Migrate();
+
+				// Seed sample books if none exist
+				if (!context.Books.Any())
+				{
+					context.Books.AddRange(
+						new Book { Title = "The Giver", IsBorrowed = false },
+						new Book { Title = "The Hobbit", IsBorrowed = false },
+						new Book { Title = "To Kill a Mockingbird", IsBorrowed = false }
+					);
+					context.SaveChanges();
+				}
+			}
+			//  SEEDING ENDS HERE
+
 			// Configure the HTTP request pipeline
 			if (!app.Environment.IsDevelopment())
 			{
