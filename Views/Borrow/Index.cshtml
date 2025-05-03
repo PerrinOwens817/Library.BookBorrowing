@@ -20,6 +20,16 @@
 	<button type="submit" class="btn btn-primary">Borrow</button>
 </form>
 
+<h4 class="mt-4">Return a Book</h4>
+<form asp-action="Return" method="post">
+	<div class="form-group">
+		<label for="returnBookId">Book ID:</label>
+		<input type="number" name="bookId" class="form-control" required />
+	</div>
+
+	<button type="submit" class="btn btn-warning mt-2">Return</button>
+</form>
+
 @if (ViewBag.Message != null)
 {
 	<div class="alert alert-info mt-3">

@@ -45,5 +45,27 @@ namespace Library.BookBorrowing.Controllers
 			var books = _borrowService.GetAvailableBooks();
 			return View("Index", books);
 		}
+
+		/// <summary>
+		/// handles the returning of a book.
+		/// </summary>
+		/// <param name="bookId"></param>
+		/// <returns></returns>
+		[HttpPost]
+		public IActionResult Return(int bookId)
+		{
+			if (bookId == 0)
+			{
+				ViewBag.Message = "Please enter a valid book ID to return.";
+			}
+			else
+			{
+				ViewBag.Message = _borrowService.ReturnBook(bookId);
+			}
+
+			var books = _borrowService.GetAvailableBooks();
+			return View("Index", books);
+		}
+
 	}
 }
