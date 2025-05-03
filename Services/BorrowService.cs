@@ -58,5 +58,25 @@ namespace Library.BookBorrowing.Services
 		{
 			return _context.Books.Where(b => !b.IsBorrowed).ToList();
 		}
+
+		/// <summary>
+		/// Returns a borrowed book, making it available again.
+		/// </summary>
+		/// <param name="bookId">The ID of the book to return.</param>
+		/// <returns>Status message.</returns>
+		public string ReturnBook(int bookId)
+		{
+			var book = _context.Books.FirstOrDefault(b => b.BookId == bookId);
+			if (book == null)
+				return "Book not found.";
+
+			if (!book.IsBorrowed)
+				return "Book is already available.";
+
+			book.IsBorrowed = false;
+			_context.SaveChanges();
+
+			return $"Book '{book.Title}' has been returned.";
+		}
 	}
 }
