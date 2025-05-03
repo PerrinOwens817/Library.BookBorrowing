@@ -19,7 +19,7 @@ namespace Library.BookBorrowing.Tests
 		private LibraryContext GetInMemoryDbContext()
 		{
 			var options = new DbContextOptionsBuilder<LibraryContext>()
-				.UseInMemoryDatabase(databaseName: "TestDb")
+				.UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
 				.Options;
 
 			var context = new LibraryContext(options);
