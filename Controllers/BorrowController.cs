@@ -47,10 +47,10 @@ namespace Library.BookBorrowing.Controllers
 		}
 
 		/// <summary>
-		/// handles the returning of a book.
+		/// Handles the returning of a book by updating its availability status.
 		/// </summary>
-		/// <param name="bookId"></param>
-		/// <returns></returns>
+		/// <param name="bookId">The ID of the book to be returned</param>
+		/// <returns>A view with an updated list of available books and a status message.</returns>
 		[HttpPost]
 		public IActionResult Return(int bookId)
 		{
